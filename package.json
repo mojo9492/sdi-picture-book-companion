@@ -6,7 +6,7 @@
   "author": "mojo9492 <mojo9492@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --verbose ./test --watch"
   },
   "dependencies": {
     "express": "^4.17.1",
