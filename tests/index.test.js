@@ -4,7 +4,7 @@ const app = require('../app.js') //2
 
 describe('backend test', () => {
     //describe
-    xit('basic GET request', () => {
+    it('basic GET request', () => {
         request(app) // 3
             .get('/user')  // 4
             .expect('Content-Type', /json/) // 5
@@ -16,7 +16,7 @@ describe('backend test', () => {
 
     });
 
-    xdescribe('/', () => {
+    describe('/', () => {
 
         it('serves a page', async () => {
             const response = await request(app)
@@ -28,7 +28,7 @@ describe('backend test', () => {
 
     });
 
-    xdescribe('/search', () => {
+    describe('/search', () => {
 
         it('allows a query get request', async () => {
             const queryType = 'NSN'
@@ -88,7 +88,7 @@ describe('backend test', () => {
         })
     })
 
-    describe('/delete', () => {
+    describe('/delete/:id', () => {
         const itemId = 1
 
         it('should delete', async () => {

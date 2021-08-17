@@ -27,8 +27,8 @@ app.get('/search', (req, res) => {
 
 app.post('/add', (req, res) => {
     const { name, data } = req.files.pic;
-
     const errorMsg = 'The server could not process your request'
+    
     if (Object.values(req.body).includes(null) ||
         Object.values(req.body).includes(undefined)) {
         res.status(422).send({ message: errorMsg })
@@ -43,7 +43,7 @@ app.post('/add', (req, res) => {
 app.delete('/delete/:id', (req, res) => {
     console.log('req.id', req.params.id)
     if (req.params.id) {
-        res.status(200)
+        res.status(200).send({message: 'you got it '})
     } else {
         res.status(422).send({message: 'you got it'})
     }
