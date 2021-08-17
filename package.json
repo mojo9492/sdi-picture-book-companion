@@ -5,6 +5,9 @@
   "repository": "git@github.com:mojo9492/sdi-picture-book-companion.git",
   "author": "mojo9492 <mojo9492@outlook.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest --watchAll"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
