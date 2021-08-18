@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+const app = express()
 const fileUpload = require('express-fileupload')
 
 app.use(express.json());
