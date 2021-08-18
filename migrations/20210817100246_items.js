@@ -8,10 +8,7 @@ exports.up = function(knex) {
       table.string('nsn').unique().notNullable();
       table.string('accounting');
       table.string('category');
-      table.integer('image_id').unsigned().notNullable();
-      table.foriegn('image_id').references('id').inTable('images');
       table.string('description');
-
   })
 };
 
