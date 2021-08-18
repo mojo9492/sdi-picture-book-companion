@@ -32,7 +32,7 @@ describe('backend test', () => {
 
         it('allows a query get request', async () => {
             const queryType = 'NSN'
-            const queryNSN = '62400000272059'
+            const queryNSN = '2920-01-420-9968'
             const response = await request(app)
                 .get(`/search?q=${queryType}&${queryType}=${queryNSN}`);
 
