@@ -22,16 +22,26 @@ app.get('/search', (req, res) => {
             .from('items')
             // .where('title', 'ilike',`%${req.query.title}%` this does partial search matching 
             .where(queryType, 'ilike', `%${queryToSearch}%`)
-            .then(data => {
-                if (data.length === 0) { // no results found
+            .then(items => {
+                if (items.length === 0) { // no results found
                     throw new Error("no results");
                 }
-                res.status(200).json(data);
-                console.log('this is the data', data);
+
+                const itemId = items[0].id
+                knex.select('*')
+                    .from('images')
+                    .where('item_id', itemId)
+                    .then(imagesData => {
+                        res.status(200).send(items)
+
+                        // res.end(imagesData[0].img)
+                    })
+                //data from api => img api <img src="google.imgsdfskdhfahsfhuudsfh">
             })
             .catch(err =>
                 res.status(404).json({
-                    message: `No item with '${queryType}' '${queryToSearch}' found`
+                    message: `No item with '${queryType}' '${queryToSearch}' found`,
+                    error: err
                 }));
     } else {
         res.status(404)
@@ -43,27 +53,44 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/add', (req, res) => {
-    const { name, data } = req.files.pic;
-    const errorMsg = 'The server could not process your request'
+    console.log('the item', req.body.item)
+    if (req.body.item) {
+        const new_item = JSON.parse(req.body.item)
+        const { name, data } = req.files.pic;
+        const errorMsg = 'The server could not process your request'
+        knex('items')
+            .returning('id')
+            .insert(new_item)
+            .then(id => {
+                const newId = id++
+                knex('images')
+                    .insert({ filename: name, img: data, item_id: newId })
+                    .then(() => res.status(200).send({ message: 'Success!' }))
+            })
 
-    if (Object.values(req.body).includes(null) ||
-        Object.values(req.body).includes(undefined)) {
-        res.status(422).send({ message: errorMsg })
-    } else {
-        const { nomenclature, common, part, NSN, accounting, category, description } = req.body
-        //insert into database
-        res.status(200).send()
+
     }
-
 })
 
 app.delete('/delete/:id', (req, res) => {
-    console.log('req.id', req.params.id)
+    console.log('req.id', req.params.id, typeof req.params.id)
+    const idParam = req.params.id++
     if (req.params.id) {
-        res.status(200).send({ message: 'you got it ' })
+        knex('images')
+            .where({ item_id: idParam })
+            .delete('*')
+            .then(() => knex('items')
+                .where({ id: idParam })
+                .delete('*')
+                .returning('nomenclature')
+                .then(data => {
+                    res.status(200).send({ message: `You have deleted item: ${data}` })
+                }))
     } else {
         res.status(422).send({ message: 'you got it' })
     }
 })
 
 module.exports = app;
+
+
