@@ -4,9 +4,9 @@ exports.up = function(knex) {
         table.increments('id');
         table.timestamps(true, true);
         table.integer('item_id').unsigned().notNullable();
-        table.foriegn('item_id').references('id').inTable('items');
+        table.foreign('item_id').references('id').inTable('items');
         table.integer('user_id').unsigned().notNullable();
-        table.foriegn('user_id').references('id').inTable('user');
+        table.foreign('user_id').references('id').inTable('users');
         table.integer('quantity');
     })
 };
