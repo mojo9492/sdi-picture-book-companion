@@ -4,7 +4,7 @@ var cors = require('cors');
 const fileUpload = require('express-fileupload')
 const knex = require('knex')(require('./knexfile.js').development);
 
-app.use(cors({ origin: 'http://localhost:3000' }))
+app.use(cors({ origin: 'http://localhost:3000', methods: "GET,HEAD,PUT,PATCH,POST,DELETE"  }))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
