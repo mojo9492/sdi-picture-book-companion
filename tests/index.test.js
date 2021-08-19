@@ -1,12 +1,10 @@
-const request = require('supertest'); // 1
-const app = require('../app.js') //2
-
+const request = require('supertest');
+const app = require('../app.js');
+const fs = require('fs');
 
 describe('backend test', () => {
 
-
     xdescribe('/', () => {
-
         it('serves a page', async () => {
             const response = await request(app)
                 .get('/')
@@ -20,7 +18,7 @@ describe('backend test', () => {
 
         it('allows a query get request', async () => {
             const queryType = 'nsn'
-            const queryNSN = '2920-01-420-9968'
+            const queryNSN = '8430-01-514-5168'
             const response = await request(app)
                 .get(`/search?type=${queryType}&${queryType}=${queryNSN}`);
 
@@ -32,34 +30,40 @@ describe('backend test', () => {
     });
 
     describe('/add', () => {
-        const imageObject = { filePath: './to/my/image.jpg' }
-        const item = {
-            "nomenclature": "Some new item",
-            "common": "Some new item",
-            "part_number": "",
-            "nsn": "7530-01-514-5168",
-            "accounting": "",
-            "category": "",
-            "description": "it a new awesome item",
-        }
-        // await supertest(app)
-        // .post('/upload')
-        // .attach('files', 'test.jpg')
+        it('adds a new item', async () => {
+            const item = {
+                "nomenclature": "Some new item",
+                "common": "Some new item",
+                "part_number": "",
+                "nsn": "7530-01-514-5168",
+                "accounting": "",
+                "category": "",
+                "description": "it a new awesome item",
+            }
 
-
-        xit('allows adding of a new item', async () => {
             const response = await request(app)
                 .post('/add')
                 .send(item)
 
             expect(response.status).toBe(200)
-            // expect(response.body.nsn).toBe(item.nsn)
+        });
+
+        xit('adds a new image', done => {
+            const imgFile = `${__dirname}/../seeds/dog_300.jpeg`;
+            const imgStream = fs.createReadStream(imgFile);
+
+            const req = request(app)
+                .post('/add')
+                .set('Content-Type', 'application/octet-stream');
+
+            imgStream.on('end', () => req.end(done));
+            imgStream.pipe(req, { end: false })
         })
 
         xit('should return 422 if incorrect data is entered', async () => {
             const message = 'The server could not process your request'
             const badItem = {
-                nomenclature: 82783274,
+                nomenclature: true,
                 common: 774374,
                 part: null,
                 NSN: undefined,
@@ -76,7 +80,7 @@ describe('backend test', () => {
             expect(response.status).toBe(422)
             expect(response.body.message).toBe(message)
 
-        })
+        });
     })
 
     describe('/delete/:id', () => {
@@ -85,10 +89,9 @@ describe('backend test', () => {
         it('should delete', async () => {
             const deleteResponse = await request(app)
                 .delete(`/delete/${itemId}`)
-            const deletionConfirmation = `You have deleted item: ${deleteResponse.body.nomenclature}`
 
             expect(deleteResponse.status).toBe(200)
-            expect(deleteResponse.body.message).toBe(deletionConfirmation)
-        })
-    })
+            expect(deleteResponse.body.message).toContain('You have deleted item: ')
+        });
+    });
 });
