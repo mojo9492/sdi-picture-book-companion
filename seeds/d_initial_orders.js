@@ -5,12 +5,12 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('orders').insert([
-        {item_id: '5', user_id: '1', quantity: 1},
-        {item_id: '2', user_id: '2', quantity: 4},
-        {item_id: '4', user_id: '3', quantity: 2},
-        {item_id: '2', user_id: '4', quantity: 3},
-        {item_id: '3', user_id: '5', quantity: 1},
-        {item_id: '1', user_id: '6', quantity: 1}
+        {nsn: 'a', first: 'aa', last: 'aaa', quantity: 1},
+        {nsn: 'b', first: 'bb', last: 'bbb', quantity: 1},
+        {nsn: 'c', first: 'cc', last: 'ccc', quantity: 1},
+        {nsn: 'd', first: 'dd', last: 'ddd', quantity: 1},
+        {nsn: 'e', first: 'ee', last: 'eee', quantity: 1},
+        {nsn: 'f', first: 'ff', last: 'fff', quantity: 1},
       ]);
     });
 };
