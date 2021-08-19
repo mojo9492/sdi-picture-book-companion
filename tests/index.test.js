@@ -2,8 +2,6 @@ const request = require('supertest');
 const app = require('../app.js');
 const fs = require('fs');
 
-
-
 describe('backend test', () => {
 
     xdescribe('/', () => {
@@ -34,8 +32,8 @@ describe('backend test', () => {
     describe('/add', () => {
 
         it('adds a new item', async () => {
-            const imgFile = fs.readFileSync('../seeds/dog_300.jpeg');
-            const fileStr = imgFile.toString('base64');
+            const imgFile = `${__dirname}/../seeds/dog_300.jpeg`;
+            const imgStream = fs.createReadStream(imgFile);
             const item = {
                 "nomenclature": "Some new item",
                 "common": "Some new item",
@@ -48,9 +46,10 @@ describe('backend test', () => {
 
             const response = await request(app)
                 .post('/add')
-                .send(item, fileStr);
+                .set('Content-Type', 'application/octet-stream')
+                .attach('name', imgFile, { contentType: 'application/octet-stream' });
 
-            expect(response.status).toBe(200);
+             expect(response.status).toBe(200)
         });
 
         xit('should return 422 if incorrect data is entered', async () => {

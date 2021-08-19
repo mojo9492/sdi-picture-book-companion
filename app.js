@@ -53,7 +53,6 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/add', (req, res) => {
-    console.log('the item', req.body.item)
     if (req.body.item) {
         const new_item = JSON.parse(req.body.item)
         const { name, data } = req.files.pic;
@@ -73,7 +72,6 @@ app.post('/add', (req, res) => {
 })
 
 app.delete('/delete/:id', (req, res) => {
-    console.log('req.id', req.params.id, typeof req.params.id)
     const idParam = req.params.id++
     if (req.params.id) {
         knex('images')
