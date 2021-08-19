@@ -29,7 +29,7 @@ describe('backend test', () => {
 
     });
 
-    describe('/add', () => {
+    xdescribe('/add', () => {
         it('adds a new item', async () => {
             const item = {
                 "nomenclature": "Some new item",
@@ -48,7 +48,7 @@ describe('backend test', () => {
             expect(response.status).toBe(200)
         });
 
-        xit('adds a new image', done => {
+        it('adds a new image', done => {
             const imgFile = `${__dirname}/../seeds/dog_300.jpeg`;
             const imgStream = fs.createReadStream(imgFile);
 
@@ -60,7 +60,7 @@ describe('backend test', () => {
             imgStream.pipe(req, { end: false })
         })
 
-        xit('should return 422 if incorrect data is entered', async () => {
+        it('should return 422 if incorrect data is entered', async () => {
             const message = 'The server could not process your request'
             const badItem = {
                 nomenclature: true,
@@ -81,6 +81,35 @@ describe('backend test', () => {
             expect(response.body.message).toBe(message)
 
         });
+    })
+
+    describe('/update/item/:itemId', () => {
+        it('should update records', async () => {
+            const updatedItem = {
+                "nomenclature": "Some new item",
+                "common": "Some new item",
+                "part_number": "",
+                "nsn": "7530-01-514-000updated-nsn",
+                "accounting": "a new accounting code",
+                "category": "",
+                "description": "it a new awesome item",
+            }
+
+            const id = 1;
+            const updateResponse = await request(app)
+                .post(`/update/item/${id}`)
+                .send(updatedItem)
+
+            //knex('users').update(id, newId).update...
+            const confirmationMsg = 'You have successfully updated item: '
+            expect(updateResponse.status).toBe(200);
+            expect(updateResponse.body.message).toContain(confirmationMsg);
+
+        })
+    })
+    
+    xdescribe('/update/images/:itemId', () => {
+        const id = 1;
     })
 
     describe('/delete/:id', () => {
