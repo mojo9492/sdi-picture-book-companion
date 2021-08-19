@@ -61,7 +61,7 @@ app.get('/images/:itemId', async (req, res) => {
         if (imageQuery === undefined) {
             res.status(404).send({ message: 'Nothing found' })
         }
-        
+
         res.status(200).end(imageQuery.img)
 
     } catch (err) {
@@ -88,6 +88,46 @@ app.post('/add', async (req, res) => {
     }
 })
 
+app.post('/update/item/:itemId', async (req, res) => {
+
+    try {
+        const idParam = req.params.itemId++
+        const {
+            nomenclature,
+            common,
+            part_number,
+            nsn,
+            accounting,
+            category,
+            description
+        } = req.body;
+
+        if (idParam) {
+            let rows = await knex('items').update({
+                nomenclature: nomenclature,
+                common: common,
+                part_number: part_number,
+                nsn: nsn,
+                accounting: accounting,
+                category: category,
+                description: description
+            })
+                .where({ id: idParam })
+
+            if (!rows) {
+                res.status(404).send({ message: 'Item id does not exist.' })
+            }
+
+            res.status(200).send({ message: `You have successfully updated item: ${nomenclature}` });
+        } else {
+            res.status(422).send({ message: 'No id supplied' })
+        }
+    } catch (err) {
+        const error = new Error();
+        error.msg = 'IDK dude'
+        res.status(500).send({ msg: error.msg, err: err })
+    }
+})
 app.delete('/delete/:id', (req, res) => {
     const idParam = req.params.id++
     if (req.params.id) {

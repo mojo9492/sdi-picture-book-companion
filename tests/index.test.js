@@ -83,6 +83,31 @@ describe('backend test', () => {
         });
     })
 
+    describe('/update/item/:itemId', () => {
+        it('should update records', async () => {
+            const updatedItem = {
+                "nomenclature": "Some new item",
+                "common": "Some new item",
+                "part_number": "",
+                "nsn": "7530-01-514-000updated-nsn",
+                "accounting": "a new accounting code",
+                "category": "",
+                "description": "it a new awesome item",
+            }
+
+            const id = 1;
+            const updateResponse = await request(app)
+                .post(`/update/item/${id}`)
+                .send(updatedItem)
+
+            //knex('users').update(id, newId).update...
+            const confirmationMsg = 'You have successfully updated item: '
+            expect(updateResponse.status).toBe(200);
+            expect(updateResponse.body.message).toContain(confirmationMsg);
+
+        })
+    })
+
     describe('/delete/:id', () => {
         const itemId = 1
 
