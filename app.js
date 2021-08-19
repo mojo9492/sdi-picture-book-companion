@@ -52,18 +52,18 @@ app.get('/search', (req, res) => {
 
 app.get('/images/:itemId', async (req, res) => {
     try {
-        console.log('you made it to images', req.params)
-        if (req.params.itemId) {
-            const { itemId } = req.params;
-            const imageQuery = await knex('images')
-                .select('*')
-                .where('item_id', itemId)
-                .first()
+        const { itemId } = req.params;
+        const imageQuery = await knex('images')
+            .select('*')
+            .where('item_id', itemId)
+            .first();
 
-            res.status(200).end(imageQuery.img)
-        } else {
-            res.status(422).send({ message: 'No item id was supplied' })
+        if (imageQuery === undefined) {
+            res.status(404).send({ message: 'Nothing found' })
         }
+        
+        res.status(200).end(imageQuery.img)
+
     } catch (err) {
         res.status(500).send(err)
     }
