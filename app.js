@@ -53,52 +53,21 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/add', async (req, res) => {
-    if (req.body.item) {
+    try {
         const new_item = JSON.parse(req.body.item);
+        const insertReturnId = await knex('items')
+            .insert(new_item)
+            .returning('id');
 
-        try {
-            const insertReturnId = await knex('items')
-                .insert(new_item)
-                .returning('id');
+        const newId = insertReturnId[0];
 
-            const { name, data } = req.files.image;
+        const insertImageReturnId = await knex('images')
+            .insert({ filename: req.files.image.name, img: req.files.image.data, item_id: newId })
+            .returning('id');
 
-            const insertImage = await knex('images')
-                .insert({ filename: name, img: data, item_id: insertReturnId++ })
-                .returning('id');
-
-            console.log('wats this ', insertImage)
-            res.status(200).send({ message: 'Yay!' })
-
-
-
-
-            // .then(id => {
-            //     const newId = id++
-            //     console.log('You are passed insertion')
-            //     if (req.files.image) {
-            //         const { name, data } = req.file.image;
-            //         console.log('You are passed image if check');
-
-            //         knex('images')
-            //             .insert({ filename: name, img: data, item_id: newId })
-            //             .then(data => {
-            //                 console.log('you made it passed image insertion', data)
-            //                 res.status(200).send({ message: 'Yay!' })
-            //             })
-
-            //     }
-
-            //     res.status(200).send({ message: `Successfully added ${req.body.item.nomenclature}` })
-
-            // })
-        } catch (err) {
-            res.status(500).send(err)
-        }
-    } else {
-        const error = new Error()
-        error.message = 'The server could not process your request';
-        res.status(422).send(error)
+        res.status(200).send({ message: `Successfully added item: ${insertReturnId[0]}/${typeof insertReturnId[0]}, image: ${newId}/${typeof newId}` })
+    } catch (err) {
+        res.status(500).send({ message: 'Server cannot process your request.', err: err.message })
     }
 })
 
