@@ -21,23 +21,13 @@ app.get('/search', (req, res) => {
         //query database and send back results
         knex.select('*')
             .from('items')
-            // .where('title', 'ilike',`%${req.query.title}%` this does partial search matching 
+            // .where('title', 'ilike',`%${req.query.title}%` this does partial search matching
             .where(queryType, 'ilike', `%${queryToSearch}%`)
             .then(items => {
                 if (items.length === 0) { // no results found
                     throw new Error("no results");
                 }
-
-                const itemId = items[0].id
-                knex.select('*')
-                    .from('images')
-                    .where('item_id', itemId)
-                    .then(imagesData => {
-                        res.status(200).send({ items: items })
-
-                        // res.end(imagesData[0].img)
-                    })
-                //data from api => img api <img src="google.imgsdfskdhfahsfhuudsfh">
+                        res.status(200).json({ item: items })
             })
             .catch(err =>
                 res.status(404).json({
