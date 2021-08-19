@@ -1,7 +1,10 @@
 const express = require('express');
-const app = express()
+const app = express();
+var cors = require('cors');
 const fileUpload = require('express-fileupload')
 const knex = require('knex')(require('./knexfile.js').development);
+
+app.use(cors({ origin: 'http://localhost:3000' }))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +33,7 @@ app.get('/search', (req, res) => {
                     .from('images')
                     .where('item_id', itemId)
                     .then(imagesData => {
-                        res.status(200).send(items)
+                        res.status(200).send({ items: items })
 
                         // res.end(imagesData[0].img)
                     })
