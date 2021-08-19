@@ -52,22 +52,53 @@ app.get('/search', (req, res) => {
     }
 });
 
-app.post('/add', (req, res) => {
+app.post('/add', async (req, res) => {
     if (req.body.item) {
-        const new_item = JSON.parse(req.body.item)
-        const { name, data } = req.files.pic;
-        const errorMsg = 'The server could not process your request'
-        knex('items')
-            .returning('id')
-            .insert(new_item)
-            .then(id => {
-                const newId = id++
-                knex('images')
-                    .insert({ filename: name, img: data, item_id: newId })
-                    .then(() => res.status(200).send({ message: 'Success!' }))
-            })
+        const new_item = JSON.parse(req.body.item);
+
+        try {
+            const insertReturnId = await knex('items')
+                .insert(new_item)
+                .returning('id');
+
+            const { name, data } = req.files.image;
+
+            const insertImage = await knex('images')
+                .insert({ filename: name, img: data, item_id: insertReturnId++ })
+                .returning('id');
+
+            console.log('wats this ', insertImage)
+            res.status(200).send({ message: 'Yay!' })
 
 
+
+
+            // .then(id => {
+            //     const newId = id++
+            //     console.log('You are passed insertion')
+            //     if (req.files.image) {
+            //         const { name, data } = req.file.image;
+            //         console.log('You are passed image if check');
+
+            //         knex('images')
+            //             .insert({ filename: name, img: data, item_id: newId })
+            //             .then(data => {
+            //                 console.log('you made it passed image insertion', data)
+            //                 res.status(200).send({ message: 'Yay!' })
+            //             })
+
+            //     }
+
+            //     res.status(200).send({ message: `Successfully added ${req.body.item.nomenclature}` })
+
+            // })
+        } catch (err) {
+            res.status(500).send(err)
+        }
+    } else {
+        const error = new Error()
+        error.message = 'The server could not process your request';
+        res.status(422).send(error)
     }
 })
 
@@ -81,11 +112,11 @@ app.delete('/delete/:id', (req, res) => {
                 .where({ id: idParam })
                 .delete('*')
                 .returning('nomenclature')
-                .then(data => {
-                    res.status(200).send({ message: `You have deleted item: ${data}` })
+                .then(nomenclature => {
+                    res.status(200).send({ message: `You have deleted item: ${nomenclature}` })
                 }))
     } else {
-        res.status(422).send({ message: 'you got it' })
+        res.status(422).send({ message: `id not supplied` })
     }
 })
 

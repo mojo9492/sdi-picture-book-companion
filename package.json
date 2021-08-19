@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "test": "jest tests/ --watch --collect-coverage --detect-open-handles"
+    "test": "jest tests/index.test.js --watch --collect-coverage --detect-open-handles"
   },
   "dependencies": {
     "express": "^4.17.1",
