@@ -128,21 +128,31 @@ app.post('/update/item/:itemId', async (req, res) => {
         res.status(500).send({ msg: error.msg, err: err })
     }
 })
-app.delete('/delete/:id', (req, res) => {
-    const idParam = req.params.id++
-    if (req.params.id) {
-        knex('images')
-            .where({ item_id: idParam })
-            .delete('*')
-            .then(() => knex('items')
-                .where({ id: idParam })
+app.delete('/delete/:id', async (req, res) => {
+
+    try {
+        const idParam = req.params.id++;
+        if (idParam) {
+            await knex('images')
                 .delete('*')
+                .where({ item_id: idParam })
+            const returnedNomenclature = await knex('items')
+                .delete('*')
+                .where({ id: idParam })
                 .returning('nomenclature')
-                .then(nomenclature => {
-                    res.status(200).send({ message: `You have deleted item: ${nomenclature}` })
-                }))
-    } else {
-        res.status(422).send({ message: `id not supplied` })
+
+            if (!returnedNomenclature) {
+                res.status(404).send({ message: `Nothing found at id: ${req.params.id}` })
+            }
+
+            res.status(200).send({ message: `You have deleted item: ${returnedNomenclature}` })
+        } else {
+            res.status(422).send({ message: `id not supplied` })
+        }
+    } catch (err) {
+        const error = new Error();
+        error.msg = 'Somethings afoot!'
+        res.status(500).send({ message: error.msg, err: err, error: error })
     }
 })
 
