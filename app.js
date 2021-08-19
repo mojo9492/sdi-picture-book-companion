@@ -63,6 +63,7 @@ app.get('/images/:itemId', async (req, res) => {
 })
 
 app.post('/add', async (req, res) => {
+
     try {
         const new_item = JSON.parse(req.body.item);
         const insertReturnId = await knex('items')
