@@ -1,4 +1,4 @@
-# sdi-picture-book-companion
+# Table
 
 ## Problem Statement
 Develop a web based application to address the problem of determining a maintenance part to be purchased using user uploaded images and associate with the appropriate manufacturer part numbers and/or national stock number (NSN)
