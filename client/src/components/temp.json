@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": 2,
+      "nomenclature": "ACU Gore-Tex Parka",
+      "common": "Wet Weather Top",
+      "part_number": "",
+      "nsn": "8415-01-526-9181",
+      "accounting": "",
+      "category": "clothing",
+      "description": "2nd Generation ECWCS parka is a soft and quiet outerwear garment constructed of durably waterproof GORE-TEX fabric and membrane (size: M-R"
+    },
+    {
+      "id": 3,
+      "nomenclature": "ACU Gore-Tex Trousers",
+      "common": "Wet Weather Bottom",
+      "part_number": "",
+      "nsn": "8415-01-526-9062",
+      "accounting": "",
+      "category": "clothing",
+      "description": "2nd Generation ECWCS parka is a soft and quiet outerwear garment constructed of durably waterproof GORE-TEX fabric and membrane (size: M-R"
+    }
+  ]
+}
