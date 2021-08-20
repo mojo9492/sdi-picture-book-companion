@@ -74,7 +74,7 @@ const ItemModal = (props) => {
                         </label>
                         <label>
                             Accounting
-                            <input id="accounting" placeholder={props.item.acounting} />
+                            <input id="accounting" placeholder={props.item.accounting} />
                         </label>
                         <label>
                             Category

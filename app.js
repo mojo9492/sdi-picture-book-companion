@@ -4,7 +4,7 @@ var cors = require('cors');
 const fileUpload = require('express-fileupload')
 const knex = require('knex')(require('./knexfile.js').development);
 
-app.use(cors({ origin: 'http://localhost:3000' }))
+app.use(cors({ origin: 'http://localhost:3000', methods: "GET,HEAD,PUT,PATCH,POST,DELETE"  }))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -65,15 +65,14 @@ app.get('/images/:itemId', async (req, res) => {
 app.post('/add', async (req, res) => {
 
     try {
-        const new_item = JSON.parse(req.body.item);
         const insertReturnId = await knex('items')
-            .insert(new_item)
+            .insert({"nomenclature": req.body.nomenclature,"common": req.body.common, "part_number": req.body.part_number, "nsn": req.body.nsn, "accounting": req.body.accounting, "category": req.body.category, "description": req.body.description})
             .returning('id');
 
         const newId = insertReturnId[0];
 
         const insertImageReturnId = await knex('images')
-            .insert({ filename: req.files.image.name, img: req.files.image.data, item_id: newId })
+            .insert({ filename: req.files.file.name, img: req.files.file.data, item_id: newId })
             .returning('id');
 
         res.status(200).send({ message: `Successfully added item: ${insertReturnId[0]}/${typeof insertReturnId[0]}, image: ${newId}/${typeof newId}` })
