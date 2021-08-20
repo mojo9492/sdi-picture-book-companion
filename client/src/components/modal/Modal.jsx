@@ -1,26 +1,40 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { Card, Button } from '@material-ui/core';
+import { CardMedia } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
     root: {
         background: 'light-gray',
-        border: '1px solid black'
+    },
+    img: {
+        width: 400,
+        height: 400,
     }
 })
 
 const ItemModal = (props) => {
     const styles = useStyles();
+    const imageInputRef = useRef();
 
     const handleEdit = (event) => {
         event.preventDefault();
+        if (imageInputRef.current.files) {
+            console.log('this is the image', imageInputRef.current.files)
+        }
         const formData = {
             id: props.item.id,
-            data: event.target
+            data: event.target,
+            files: imageInputRef.current.files[0]
         }
 
         props.handleEvent(formData)
+    }
+
+    const handleDelete = () => {
+
+        props.handleDelete(props.item.id)
     }
 
     return (
@@ -31,8 +45,17 @@ const ItemModal = (props) => {
                 aria-labelledby='item modal'
                 aria-describedby='here you can edit the modal'>
                 <Card>
+                    <CardMedia
+                        className={styles.img}
+                        image={`http://localhost:8080/images/${props.item.id}`}
+                        title="Item_Image"
+                    />
                     <form onSubmit={handleEdit}>
                         <p>Item {props.item.id}</p>
+                        <label>
+                            Image Upload
+                            <input id='image' type='file' name='file' ref={imageInputRef} />
+                        </label>
                         <label>
                             Nomenclature
                             <input id="nomenclature" placeholder={props.item.nomenclature} />
@@ -63,7 +86,7 @@ const ItemModal = (props) => {
                         </label>
                         <div>
                             <Button variant='contained' color='primary' type='submit'>Submit</Button>
-                            <Button color='secondary'>Delete</Button>
+                            <Button color='secondary' onClick={handleDelete}>Delete</Button>
                         </div>
                     </form>
                 </Card>

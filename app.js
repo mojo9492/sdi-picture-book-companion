@@ -27,7 +27,7 @@ app.get('/search', (req, res) => {
                 if (items.length === 0) { // no results found
                     throw new Error("no results");
                 }
-                        res.status(200).json({ item: items })
+                res.status(200).json({ item: items })
             })
             .catch(err =>
                 res.status(404).json({
@@ -81,7 +81,31 @@ app.post('/add', async (req, res) => {
         res.status(500).send({ message: 'Server cannot process your request.', err: err.message })
     }
 })
+app.post('/update/image/:item_id', async (req, res) => {
 
+    try {
+        const itemIdParam = req.params.item_id++;
+        if (itemIdParam) {
+            let rows = await knex('images')
+                .update({
+                    filename: req.files.image.name,
+                    img: req.files.image.data,
+                })
+                .where({ item_id: itemIdParam });
+            if (!rows) {
+                res.status(404).send({ message: 'Item id does not exist.' })
+            }
+            res.status(200).send({ message: `You have successfully updated image: ${req.files.image.name}}` });
+        } else {
+            res.status(422).send({ message: 'No id supplied' })
+        }
+
+    } catch (err) {
+        const error = new Error();
+        error.msg = 'Somethings afoot!'
+        res.status(500).send({ message: error.msg, err: err, error: error })
+    }
+})
 app.post('/update/item/:itemId', async (req, res) => {
 
     try {
@@ -118,10 +142,11 @@ app.post('/update/item/:itemId', async (req, res) => {
         }
     } catch (err) {
         const error = new Error();
-        error.msg = 'IDK dude'
+        error.msg = 'Server Error'
         res.status(500).send({ msg: error.msg, err: err })
     }
 })
+
 app.delete('/delete/:id', async (req, res) => {
 
     try {
