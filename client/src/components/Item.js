@@ -38,12 +38,12 @@ const Item = (props) => {
         <Card className={styles.root}>
           <CardMedia
             className={styles.img}
-            image={`http://localhost:8080/images/${id}`}
+            image={`http://localhost:8080/images/${id}?${Math.random()}`}
             title="Item_Image"
           />
           <ul className={styles.ul}>
             <li className={styles.li} data-cy='result-nomenclature' >{nomenclature}</li>
-            <li className={styles.li} >{common}</li>
+            <li className={styles.li} data-cy='result-common' >{common}</li>
             <li className={styles.li} >{nsn}</li>
             <li className={styles.li} >{part_number}</li>
             <li className={styles.li} >{accounting}</li>

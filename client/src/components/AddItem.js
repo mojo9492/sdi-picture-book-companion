@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory }from'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const AddItem = () => {
 
@@ -38,6 +38,7 @@ let imageFunc = (e) => {
 setSelectedFile(e.target.files[0])
 
 }
+let history = useHistory()
 
 const postFunc = (e) => {
 e.preventDefault();
@@ -58,21 +59,23 @@ console.log(data);
 })
 .catch(console.warn);
 
+history.push('/')
+
 }
 
 
 return (
 <>
 <form onSubmit={ postFunc } id="myForm">
-<input type='text' name='nomenclature' onInput={ onInputListenerNomenclature }/>
-<input type='text' name='common' onInput={ onInputListenerCommon }/>
-<input type='text' name='part_number' onInput={ onInputListenerPart }/>
-<input type='text' name='nsn' onInput={ onInputListenerNsn }/>
-<input type='text' name='accounting' onInput={ onInputListenerAccounting }/>
-<input type='text' name='category' onInput={ onInputListeneCategory }/>
-<input type='text' name='description' onInput={ onInputListenerDescription }/>
+<input data-cy="nomenclature-add" type='text' placeholder='Nomenclature' name='nomenclature' onInput={ onInputListenerNomenclature }/>
+<input data-cy="common-add" type='text' placeholder='Common Name' name='common' onInput={ onInputListenerCommon }/>
+<input data-cy="partnumber-add" type='text' placeholder='Part Number' name='part_number' onInput={ onInputListenerPart }/>
+<input data-cy="NSN-add" type='text' placeholder='NSN' name='nsn' onInput={ onInputListenerNsn }/>
+<input data-cy="accounting-add" type='text' placeholder='Accounting' name='accounting' onInput={ onInputListenerAccounting }/>
+<input data-cy="category-add" type='text' placeholder='Category' name='category' onInput={ onInputListeneCategory }/>
+<input data-cy="description-add" type='text' placeholder='Description' name='description' onInput={ onInputListenerDescription }/>
 <input type='file' name='file' onChange = {imageFunc} />
-<input type='button' name='image' value='Submit' onClick={ postFunc }/>
+<input data-cy="submit-add" type='button' name='image' value='Submit' onClick={ postFunc }/>
 </form>
 </>
 );
