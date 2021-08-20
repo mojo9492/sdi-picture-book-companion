@@ -111,7 +111,8 @@ const ItemModal = (props) => {
                         </label>
                         <label className={styles.formInputs}>
                             Accounting
-                            <input className={styles.formInputs} id="accounting" placeholder={props.item.acounting} />
+
+                            <input id="accounting" placeholder={props.item.accounting} />
                         </label>
                         <label className={styles.formInputs}>
                             Category
