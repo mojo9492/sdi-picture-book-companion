@@ -7,6 +7,7 @@ const Home = () => {
 const [userInput, setUserInput] = useState(" ");
 const [itemSelection, setItemSelection] = useState("nomenclature")
 
+
 const onInputListener = (e) => {
   setUserInput(e.target.value)
 }
@@ -27,14 +28,14 @@ history.push(`/search?type=${ itemSelection }&${ itemSelection }=${userInput}`)
   return (
     <>
       <form onSubmit={ navigateToSearch }>
-        <input type='text' placeholder='search by' onInput={ onInputListener }/>
-        <select name='item selection' onChange={ selectedItemUpdate }>
+        <input data-cy='search-input' type='text' placeholder='search by' onInput={ onInputListener }/>
+        <select data-cy='dropdown-menu' name='item selection' onChange={ selectedItemUpdate }>
             <option value='nomenclature'>nomenclature</option>
             <option value='part number'>part number</option>
             <option value='nsn'>nsn</option>
             <option value='common name'>common name</option>
         </select>
-        <input type='button' value='submit' onClick={navigateToSearch}/>
+        <input data-cy='submit-button' type='button' value='submit' onClick={navigateToSearch}/>
       </form>
     </>
   );
